@@ -1,30 +1,318 @@
 <!DOCTYPE html>
+
 <html>
 <head>
-    
-    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
-    
-        <script>
+<meta content="text/html; charset=utf-8" http-equiv="content-type"/>
+<script>
             L_NO_TOUCH = false;
             L_DISABLE_3D = false;
-        </script>
-    
-    <style>html, body {width: 100%;height: 100%;margin: 0;padding: 0;}</style>
-    <style>#map {position:absolute;top:0;bottom:0;right:0;left:0;}</style>
-    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.6.0/dist/leaflet.js"></script>
-    <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.6.0/dist/leaflet.css"/>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css"/>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css"/>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css"/>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css"/>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/leaflet.awesome.rotate.min.css"/>
-    
-            <meta name="viewport" content="width=device-width,
-                initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-            <style>
+        
+
+
+
+
+// Add custom CSS to reduce white circle icon size by 25%
+const style = document.createElement('style');
+style.innerHTML = `
+    .awesome-marker i.fa.fa-circle.fa-regular {
+        font-size: 0.75em !important;
+    }
+`;
+document.head.appendChild(style);
+
+// Define color palette and icon function using a white circle FA icon
+const groupColors = {};
+const availableColors = ['red', 'orange', 'blue', 'purple', 'darkred', 'cadetblue', 'darkpurple', 'darkgreen', 'black', 'lightred'];
+let colorIndex = 0;
+
+function getColoredMarkerIcon(groupName) {
+    if (!groupColors[groupName]) {
+        groupColors[groupName] = availableColors[colorIndex % availableColors.length];
+        colorIndex++;
+    }
+    return L.AwesomeMarkers.icon({
+        icon: 'circle',
+        prefix: 'fa',
+        extraClasses: 'fa-regular',
+        markerColor: groupColors[groupName],
+        iconColor: 'white'
+    });
+}
+
+// Apply colored markers with resized white circle icons to non-Independent groups
+setTimeout(() => {
+    Object.keys(layer_control_35841456f16c3d23cc9190c0bf848520.overlays).forEach(groupName => {
+        if (!groupName.includes("Independent")) {
+            const featureGroup = layer_control_35841456f16c3d23cc9190c0bf848520.overlays[groupName];
+            featureGroup.eachLayer(marker => {
+                marker.setIcon(getColoredMarkerIcon(groupName));
+            });
+        }
+    });
+}, 500);
+
+
+</script>
+<style>html, body {width: 100%;height: 100%;margin: 0;padding: 0;}
+
+/* Match filter items with marker colors using colored pins */
+
+
+.leaflet-control-layers-overlays label:nth-of-type(2) span::before {
+    color: red;
+}
+
+.leaflet-control-layers-overlays label:nth-of-type(3) span::before {
+    color: orange;
+}
+
+.leaflet-control-layers-overlays label:nth-of-type(4) span::before {
+    color: blue;
+}
+
+.leaflet-control-layers-overlays label:nth-of-type(5) span::before {
+    color: purple;
+}
+
+.leaflet-control-layers-overlays label:nth-of-type(6) span::before {
+    color: darkred;
+}
+
+.leaflet-control-layers-overlays label:nth-of-type(7) span::before {
+    color: cadetblue;
+}
+
+.leaflet-control-layers-overlays label:nth-of-type(8) span::before {
+    color: darkpurple;
+}
+
+.leaflet-control-layers-overlays label:nth-of-type(9) span::before {
+    color: darkgreen;
+}
+
+.leaflet-control-layers-overlays label:nth-of-type(10) span::before {
+    color: black;
+}
+
+.leaflet-control-layers-overlays label:nth-of-type(11) span::before {
+    color: lightred;
+}
+
+
+/* Add colored pin icon to the right of the checkbox label */
+.leaflet-control-layers-overlays label {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 6px;
+}
+.leaflet-control-layers-overlays label span::after {
+    content: "\f041";
+    font-family: "FontAwesome";
+    font-size: 14px;
+    margin-left: 8px;
+
+}
+
+.leaflet-control-layers-overlays label:nth-of-type(1) span::after {
+    color: #4595CF;
+}
+.leaflet-control-layers-overlays label:nth-of-type(2) span::after {
+    color: #FF0000
+}
+.leaflet-control-layers-overlays label:nth-of-type(3) span::after {
+    color: #FFA500
+}
+.leaflet-control-layers-overlays label:nth-of-type(4) span::after {
+    color: #38A9DC
+}
+.leaflet-control-layers-overlays label:nth-of-type(5) span::after {
+    color: #D152B8
+}
+.leaflet-control-layers-overlays label:nth-of-type(6) span::after {
+    color: #8B0000
+}
+.leaflet-control-layers-overlays label:nth-of-type(7) span::after {
+    color: #436978
+}
+.leaflet-control-layers-overlays label:nth-of-type(8) span::after {
+    color: #9950A6
+}
+.leaflet-control-layers-overlays label:nth-of-type(9) span::after {
+    color: #728224
+}
+.leaflet-control-layers-overlays label:nth-of-type(10) span::after {
+    color: #000000
+}
+.leaflet-control-layers-overlays label:nth-of-type(11) span::after {
+    color: #FF8E7F
+}
+.leaflet-control-layers-overlays label:nth-of-type(12) span::after {
+    color: #FF0000
+}
+.leaflet-control-layers-overlays label:nth-of-type(13) span::after {
+    color: #FFA500
+}
+.leaflet-control-layers-overlays label:nth-of-type(14) span::after {
+    color: #38A9DC
+}
+.leaflet-control-layers-overlays label:nth-of-type(15) span::after {
+    color: #D152B8
+}
+.leaflet-control-layers-overlays label:nth-of-type(16) span::after {
+    color: #8B0000
+}
+.leaflet-control-layers-overlays label:nth-of-type(17) span::after {
+    color: #436978
+}
+.leaflet-control-layers-overlays label:nth-of-type(18) span::after {
+    color: #9950A6
+}
+.leaflet-control-layers-overlays label:nth-of-type(19) span::after {
+    color: #728224
+}
+.leaflet-control-layers-overlays label:nth-of-type(20) span::after {
+    color: #000000
+}
+.leaflet-control-layers-overlays label:nth-of-type(21) span::after {
+    color: #FF8E7F
+}
+.leaflet-control-layers-overlays label:nth-of-type(22) span::after {
+    color: #FF0000
+}
+.leaflet-control-layers-overlays label:nth-of-type(23) span::after {
+    color: #FFA500
+}
+.leaflet-control-layers-overlays label:nth-of-type(24) span::after {
+    color: #38A9DC
+}
+.leaflet-control-layers-overlays label:nth-of-type(25) span::after {
+    color: #D152B8
+}
+.leaflet-control-layers-overlays label:nth-of-type(26) span::after {
+    color: #8B0000
+}
+.leaflet-control-layers-overlays label:nth-of-type(27) span::after {
+    color: #436978
+}
+.leaflet-control-layers-overlays label:nth-of-type(28) span::after {
+    color: #9950A6
+
+}
+
+/* Add colored pin icon to the right of the checkbox label */
+.leaflet-control-layers-overlays label {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 6px;
+}
+.leaflet-control-layers-overlays label span::after {
+    content: "\f041";
+    font-family: "FontAwesome";
+    font-size: 14px;
+    margin-left: 8px;
+}
+
+.leaflet-control-layers-overlays label:nth-of-type(1) span::after {
+    color: #4595CF;
+}
+.leaflet-control-layers-overlays label:nth-of-type(2) span::after {
+    color: #FF0000
+}
+.leaflet-control-layers-overlays label:nth-of-type(3) span::after {
+    color: #FFA500
+}
+.leaflet-control-layers-overlays label:nth-of-type(4) span::after {
+    color: #38A9DC
+}
+.leaflet-control-layers-overlays label:nth-of-type(5) span::after {
+    color: #D152B8
+}
+.leaflet-control-layers-overlays label:nth-of-type(6) span::after {
+    color: #8B0000
+}
+.leaflet-control-layers-overlays label:nth-of-type(7) span::after {
+    color: #436978
+}
+.leaflet-control-layers-overlays label:nth-of-type(8) span::after {
+    color: #9950A6
+}
+.leaflet-control-layers-overlays label:nth-of-type(9) span::after {
+    color: #728224
+}
+.leaflet-control-layers-overlays label:nth-of-type(10) span::after {
+    color: #000000
+}
+.leaflet-control-layers-overlays label:nth-of-type(11) span::after {
+    color: #FF8E7F
+}
+.leaflet-control-layers-overlays label:nth-of-type(12) span::after {
+    color: #FF0000
+}
+.leaflet-control-layers-overlays label:nth-of-type(13) span::after {
+    color: #FFA500
+}
+.leaflet-control-layers-overlays label:nth-of-type(14) span::after {
+    color: #38A9DC
+}
+.leaflet-control-layers-overlays label:nth-of-type(15) span::after {
+    color: #D152B8
+}
+.leaflet-control-layers-overlays label:nth-of-type(16) span::after {
+    color: #8B0000
+}
+.leaflet-control-layers-overlays label:nth-of-type(17) span::after {
+    color: #436978
+}
+.leaflet-control-layers-overlays label:nth-of-type(18) span::after {
+    color: #9950A6
+}
+.leaflet-control-layers-overlays label:nth-of-type(19) span::after {
+    color: #728224
+}
+.leaflet-control-layers-overlays label:nth-of-type(20) span::after {
+    color: #000000
+}
+.leaflet-control-layers-overlays label:nth-of-type(21) span::after {
+    color: #FF8E7F
+}
+.leaflet-control-layers-overlays label:nth-of-type(22) span::after {
+    color: #FF0000
+}
+.leaflet-control-layers-overlays label:nth-of-type(23) span::after {
+    color: #FFA500
+}
+.leaflet-control-layers-overlays label:nth-of-type(24) span::after {
+    color: #38A9DC
+}
+.leaflet-control-layers-overlays label:nth-of-type(25) span::after {
+    color: #D152B8
+}
+.leaflet-control-layers-overlays label:nth-of-type(26) span::after {
+    color: #8B0000
+}
+.leaflet-control-layers-overlays label:nth-of-type(27) span::after {
+    color: #436978
+}
+.leaflet-control-layers-overlays label:nth-of-type(28) span::after {
+    color: #9950A6
+
+}</style>
+<style>#map {position:absolute;top:0;bottom:0;right:0;left:0;}</style>
+<script src="https://cdn.jsdelivr.net/npm/leaflet@1.6.0/dist/leaflet.js"></script>
+<script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/leaflet@1.6.0/dist/leaflet.css" rel="stylesheet"/>
+<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet"/>
+<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css" rel="stylesheet"/>
+<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet"/>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css" rel="stylesheet"/>
+<link href="https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/leaflet.awesome.rotate.min.css" rel="stylesheet"/>
+<meta content="width=device-width,
+                initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
+<style>
                 #map_d93cb6ad1e480746bb57b0a63436a48f {
                     position: relative;
                     width: 100.0%;
@@ -33,20 +321,50 @@
                     top: 0.0%;
                 }
             </style>
-        
 </head>
 <body>
-    
-    
-<div style="position: fixed; top: 10px; right: 10px; z-index:9999; 
-            background:white; padding:7px 10px; border-radius:8px; 
-            box-shadow:2px 2px 5px rgba(0,0,0,0.3); font-weight:bold;
-            font-size: 16px; width: 230px; text-align: left;">
-    Filter by Chain [1189]
+
+
+<div style="position: fixed; top: 10px; right: 26px; z-index:9999; 
+            background:white; padding:7px 10px; border-radius:5px; 
+            box-shadow:2px 2px 5px rgba(0,0,0,0); font-weight:bold;
+            font-size: 17px; width: 230px; text-align: left;">
+    Filter by Group   [1189]
 </div>
-    
-            <div class="folium-map" id="map_d93cb6ad1e480746bb57b0a63436a48f" ></div>
-        
+<div class="folium-map" id="map_d93cb6ad1e480746bb57b0a63436a48f"></div>
+
+<script>
+function toggleAllLayers(checked) {
+    document.querySelectorAll('.leaflet-control-layers-overlays input[type=checkbox]').forEach(cb => {
+        if (cb.checked !== checked) {
+            cb.click();
+        }
+    });
+}
+</script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const filterBox = document.querySelector('.leaflet-control-layers-list');
+    if (filterBox) {
+        const btnContainer = document.createElement('div');
+        btnContainer.innerHTML = `
+            <div style="margin-top: 10px; display: flex; justify-content: space-between; gap: 8px;">
+                <button onclick="toggleAllLayers(true)" style="flex:1;">Select All</button>
+                <button onclick="toggleAllLayers(false)" style="flex:1;">Unselect All</button>
+            </div>
+        `;
+        filterBox.appendChild(btnContainer);
+    }
+});
+function toggleAllLayers(checked) {
+    document.querySelectorAll('.leaflet-control-layers-overlays input[type=checkbox]').forEach(cb => {
+        if (cb.checked !== checked) {
+            cb.click();
+        }
+    });
+}
+</script>
 </body>
 <script>
     
